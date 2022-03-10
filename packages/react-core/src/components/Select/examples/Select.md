@@ -10,6 +10,89 @@ import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
 
 ## Examples
 
+### Reproducer
+
+```js
+import React from 'react';
+import { Select, SelectOption, SelectVariant, SelectGroup, Divider, ToggleGroupItem, ToggleGroup } from '@patternfly/react-core';
+
+class Reproducer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      selected: null
+    };
+
+    this.onToggle = isOpen => {
+      this.setState({
+        isOpen
+      });
+    };
+
+    this.onSelect = (event, selection) => {
+      this.setState({
+        selected: selection,
+        isOpen: false
+      });
+    };
+
+    this.clearSelection = () => {
+      this.setState({
+        selected: null
+      });
+    };
+
+    this.options = [
+      <SelectGroup label="Status" key="group1">
+        <SelectOption key={0} value="Running" />
+        <SelectOption key={1} value="Stopped" />
+        <SelectOption key={2} value="Down" />
+        <SelectOption key={3} value="Degraded" />
+        <SelectOption key={4} value="Needs maintenance" />
+      </SelectGroup>,
+      <Divider key="divider" />,
+      <SelectGroup label="Vendor names" key="group2">
+        <SelectOption key={5} value="Dell" />
+        <SelectOption key={6} value="Samsung" isDisabled />
+        <SelectOption key={7} value="Hewlett-Packard" />
+      </SelectGroup>
+    ];
+  }
+
+  render() {
+    const { isOpen, selected } = this.state;
+    const titleId = 'grouped-single-select-id';
+    return (
+      <div>
+        <span id={titleId} hidden>
+          Grouped Checkbox Title
+        </span>
+          <Select
+          isGrouped
+           variant={SelectVariant.typeahead}
+           menuAppendTo={() => document.body}
+            aria-label="Select Input"
+            onToggle={this.onToggle}
+            onSelect={this.onSelect}
+            selections={selected}
+            isOpen={isOpen}
+            isInputValuePersisted
+            onTypeaheadInputChanged={value => console.log(value)}
+            footer={<ToggleGroup>
+                  <ToggleGroupItem text="test" onClick={() => console.log("test")}/>
+                  <ToggleGroupItem text="next" onClick={() => console.log("test")}/>
+            </ToggleGroup>
+      }
+       >
+            {this.options}
+          </Select>
+      </div>
+    );
+  }
+}
+```
+
 ### Single
 
 ```js
